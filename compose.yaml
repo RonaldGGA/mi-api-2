@@ -1,0 +1,27 @@
+services:
+  web:
+    build: . 
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+  db:
+    image: postgres:16-alpine
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "usuario", "-d", "tienda"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:

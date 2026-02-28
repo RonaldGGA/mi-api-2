@@ -1,0 +1,25 @@
+# ── ETAPA 1: construcción ──────────────────────
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+# ── ETAPA 2: producción ────────────────────────
+FROM node:20-alpine AS production
+
+WORKDIR /app
+
+COPY --from=builder /app/package*.json ./
+
+RUN npm install --omit=dev
+
+COPY --from=builder /app/index.js ./
+
+USER node
+
+CMD ["node", "index.js"]
