@@ -16,12 +16,22 @@ app.get("/productos", async (req, res) => {
     res.json(resultado.rows)
 })
 
+app.get("/salud", (req, res) => {
+    res.json({ estado: "ok" })
+})
+
 app.post("/productos", async (req, res) => {
     const { nombre, precio } = req.body
     const resultado = await db.query("INSERT INTO productos (nombre, precio) VALUES ($1, $2) RETURNING *", [nombre, precio])
     res.json(resultado.rows[0])
 })
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`)
+    })
+}
+
+
+module.exports = app
