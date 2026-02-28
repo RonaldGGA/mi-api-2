@@ -26,7 +26,7 @@ describe('API de productos', () => {
     test('GET /salud devuelve ok', async () => {
         const res = await request(app).get('/salud')
         expect(res.statusCode).toBe(200)
-        expect(res.body.estado).toBe('mal')
+        expect(res.body.estado).toBe('ok')
     })
 
 })
